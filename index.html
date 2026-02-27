@@ -37,8 +37,62 @@
   <div id="sidebar">
     <button id="glossaryToggle">◀</button>
     <div id="glossaryContent">
-      <h2>Glossary</h2>
-      <ul id="glossaryList"></ul>
+
+      <h2 id="glossaryTitle">Glossary</h2>
+
+      <!-- Main Menu -->
+      <div id="glossaryMenu" class="panel active">
+        <button class="section-btn" data-section="classrooms">
+          Classrooms & Labs
+        </button>
+
+        <button class="section-btn" data-section="admin">
+          Administrative Buildings
+        </button>
+
+        <button class="section-btn" data-section="featured">
+          Featured Facilities
+        </button>
+      </div>
+
+      <!-- Classrooms -->
+      <div id="classrooms" class="panel">
+        <button class="back-btn">← Back</button>
+        <ul>
+          <li><button class="building-btn" data-building="building1">Building 1</button></li>
+          <li><button class="building-btn" data-building="building2">Building 2</button></li>
+          <li><button class="building-btn" data-building="building3">Building 3</button></li>
+          <li><button class="building-btn" data-building="building4">Building 4</button></li>
+        </ul>
+      </div>
+
+      <!-- Admin -->
+      <div id="admin" class="panel">
+        <button class="back-btn">← Back</button>
+        <ul>
+          <li><button class="building-btn" data-building="building5">Building 5</button></li>
+          <li><button class="building-btn" data-building="building110">Building 110</button></li>
+          <li><button class="building-btn" data-building="building120">Building 120</button></li>
+          <li><button class="building-btn" data-building="building130">Building 130</button></li>
+          <li><button class="building-btn" data-building="lakeview">Lakeview</button></li>
+        </ul>
+      </div>
+
+      <!-- Featured -->
+      <div id="featured" class="panel">
+        <button class="back-btn">← Back</button>
+        <ul>
+          <li><button class="building-btn" data-building="treehouse">The Treehouse</button></li>
+          <li><button class="building-btn" data-building="fslabs">Full Sail Labs</button></li>
+          <li><button class="building-btn" data-building="fslive1">Full Sail Live 1</button></li>
+          <li><button class="building-btn" data-building="fslive2">Full Sail Live 2</button></li>
+          <li><button class="building-btn" data-building="fslive3">Full Sail Live 3</button></li>
+          <li><button class="building-btn" data-building="backlot">Film Backlot Zones</button></li>
+          <li><button class="building-btn" data-building="helpdesk">Staff Help Desk</button></li>
+          <li><button class="building-btn" data-building="hangr">The Hangr</button></li>
+        </ul>
+      </div>
+
     </div>
   </div>
 </div>

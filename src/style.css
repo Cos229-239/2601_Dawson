@@ -91,7 +91,7 @@ body {
 }
 
 #sidebar.open {
-    width: 100px;
+    width: 320px;
 }
 
 #glossaryToggle {
@@ -122,5 +122,73 @@ body {
     opacity: 1;
 }
 
+#glossaryContent {
+    padding: 60px 15px 15px 15px;
+}
 
+/* Panels */
+.panel {
+    display: none;
+}
 
+.panel.active {
+    display: block;
+}
+
+/* Section buttons */
+.section-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f47c20;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.section-btn:hover {
+    background: #d96817;
+}
+
+/* Back button */
+.back-btn {
+    background: #ccc;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #aaa;
+}
+
+/* Lists */
+.panel ul {
+    padding-left: 18px;
+}
+
+.panel li {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.building-btn {
+    width: 100%;
+    padding: 8px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.building-btn:hover {
+    color: #f47c20;
+    font-weight: bold;
+}

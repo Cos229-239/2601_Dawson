@@ -6,6 +6,8 @@ let map;
 
 document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is fully loaded
 
+    let polygonsData;
+
     const landing = document.getElementById("landing");         // container for the landing screen
     const mapScreen = document.getElementById("mapScreen");     // container that holds the map
     const devButton = document.getElementById("dev");           // button that initializes the map
@@ -26,6 +28,26 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
         } else {
             toggle.textContent = '◀'
         }
+    });
+
+    const menuPanel = document.getElementById("glossaryMenu");
+    const panels = document.querySelectorAll(".panel");
+    const sectionButtons = document.querySelectorAll(".section-btn");
+    const backButton = document.querySelectorAll(".back-btn");
+
+    sectionButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const section = button.dataset.section;
+            panels.forEach(p => p.classList.remove("active"));
+            document.getElementById(section).classList.add("active");
+        });
+    });
+
+    backButton.forEach(button => {
+        button.addEventListener("click", () => {
+            panels.forEach(p => p.classList.remove("active"));
+            menuPanel.classList.add("active");
+        });
     });
 
     // function for creating and configuring map
@@ -67,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
 
             // load GeoJson files
             const linesData = await loadGeoJSON('/osm_data/lines.json');
-            const polygonsData = await loadGeoJSON('/osm_data/polygons.json');
+            polygonsData = await loadGeoJSON('/osm_data/polygons.json');
 
             // add a GeoJson source for buildings
             map.addSource('polygons', {
@@ -119,25 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
                 }
             });
 
-            map.addLayer({
-                id: 'building-labels',
-                type: 'symbol',
-                source: 'polygons',
-                filter: ['has', 'name'],
-                layout: {
-                    'text-field': ['get', 'name'],
-                    'text-size': 12,
-                    'text-font': ['Open Sans Regular'],
-                    'text-offset': [0, 0],
-                    'text-anchor': 'center'
-                },
-                paint: {
-                    'text-color': '#333333'
-                }
-            });
-
-            
-
             // add a GeoJson layer for roads and paths           
             map.addLayer({
                 id: 'road-casing',
@@ -185,6 +188,51 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
                 }
             });
 
+            // widgets
+            const widgets = {
+                "Building 1": { coords: [-81.3014, 28.5964], marker: null },
+                "Building 2": { coords: [-81.3024, 28.5965], marker: null },
+                "Building 3": { coords: [-81.3041, 28.5952], marker: null },
+                "Building 4": { coords: [-81.3048, 28.5915], marker: null },
+
+                "Building 5": { coords: [-81.3035, 28.595], marker: null },
+                "Building 110": { coords: [-81.30519, 28.59605], marker: null },
+                "Building 120": { coords: [-81.30582, 28.59614], marker: null },
+                "Building 130": { coords: [-81.306535, 28.59599], marker: null },
+                "Lakeview": { coords: [-81.3037, 28.5958], marker: null },
+
+                "treehouse": { coords: [-81.304, 28.5965], marker: null },
+                "Full Sail Labs": { coords: [-81.30656, 28.59502], marker: null },
+                "Full Sail Live 1": { coords: [-81.29809, 28.59658], marker: null },
+                "Full Sail Live 2": { coords: [-81.29960, 28.59506], marker: null },
+                "Full Sail Live 3": { coords: [-81.30560, 28.59669], marker: null },
+                "backlot": { coords: [-81.3047, 28.5969], marker: null },
+                "helpdesk": { coords: [-81.305, 28.597], marker: null },
+                "hangr": { coords: [-81.3052, 28.5972], marker: null }
+            }
+
+            const buildingButtons = document.querySelectorAll(".building-btn");
+            buildingButtons.forEach(button => {
+                button.addEventListener("click", () => {
+
+                    if (!map) return;
+
+                    const buildingName = button.textContent.trim();
+                    const widget = widgets[buildingName];
+
+                    if (!widget || !widget.coords) {
+                        console.warn("Widget not found or coords missing:", buildingName);
+                        return;
+                    }
+
+                    map.flyTo({
+                        center: widget.coords,  
+                        zoom: 17.8,
+                        essential: true
+                    });
+                });
+            });
+        });
 
             // defines bounds of the campus
             const mapBounds = [
@@ -200,7 +248,5 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
             map.setMaxBounds(mapBounds);    // prevents user from moving outside bounds
             map.setMinZoom(15.5);           // prevents user from zoomin too far out
             map.setMaxZoom(19);             // prevents user from zoomin too far in
-
-        });
     }
 });
