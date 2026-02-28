@@ -16,9 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
 
     devButton.addEventListener("click", () => { // when the "dev" button is clicked
         landing.style.display = "none";         // hides the landing screen
-        mapScreen.style.display = "block";      // shows map screen
+        mapScreen.style.display = "flex";      // shows map screen
 
         initMap();  // finally, initializes the map
+        setTimeout(() => map.resize(), 100);
     });
 
     toggle.addEventListener("click", () => {
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
                     }
                 ]
             }
+            
         });
 
         // helper function for fetching and parsing a GeoJson file
@@ -190,26 +192,65 @@ document.addEventListener('DOMContentLoaded', () => {   // waits until HTML is f
 
             // widgets
             const widgets = {
-                "Building 1": { coords: [-81.3014, 28.5964], marker: null },
-                "Building 2": { coords: [-81.3024, 28.5965], marker: null },
-                "Building 3": { coords: [-81.3041, 28.5952], marker: null },
-                "Building 4": { coords: [-81.3048, 28.5915], marker: null },
+                "Building 1": { coords: [-81.3014, 28.5964]},
+                "Building 2": { coords: [-81.3024, 28.5965]},
+                "Building 3": { coords: [-81.3041, 28.5952]},
+                "Building 4": { coords: [-81.3048, 28.5915]},
 
-                "Building 5": { coords: [-81.3035, 28.595], marker: null },
-                "Building 110": { coords: [-81.30519, 28.59605], marker: null },
-                "Building 120": { coords: [-81.30582, 28.59614], marker: null },
-                "Building 130": { coords: [-81.306535, 28.59599], marker: null },
-                "Lakeview": { coords: [-81.3037, 28.5958], marker: null },
+                "Building 110": { coords: [-81.30519, 28.59605]},
+                "Building 120": { coords: [-81.30582, 28.59614]},
+                "Building 130": { coords: [-81.306535, 28.59599]},
 
-                "treehouse": { coords: [-81.304, 28.5965], marker: null },
-                "Full Sail Labs": { coords: [-81.30656, 28.59502], marker: null },
-                "Full Sail Live 1": { coords: [-81.29809, 28.59658], marker: null },
-                "Full Sail Live 2": { coords: [-81.29960, 28.59506], marker: null },
-                "Full Sail Live 3": { coords: [-81.30560, 28.59669], marker: null },
-                "backlot": { coords: [-81.3047, 28.5969], marker: null },
-                "helpdesk": { coords: [-81.305, 28.597], marker: null },
-                "hangr": { coords: [-81.3052, 28.5972], marker: null }
+                "Full Sail Labs": { coords: [-81.30656, 28.59502]},
+                "Full Sail Live 1": { coords: [-81.29809, 28.59658]},
+                "Full Sail Live 2": { coords: [-81.29960, 28.59506]},
+                "Full Sail Live 3": { coords: [-81.30560, 28.59669]},
             }
+
+            Object.keys(widgets).forEach(name => {
+
+                const el = document.createElement("div");
+                el.className = "building-widget";
+                el.innerText = name;
+
+                el.addEventListener("click", () => {
+                    map.flyTo({
+                        center: widgets[name].coords,
+                        zoom: 18,
+                        essential: true
+                    });
+                });
+
+                const marker = new mapboxgl.Marker({
+                    element: el,
+                    anchor: "center"
+                })
+
+                .setLngLat(widgets[name].coords)
+                .addTo(map);
+
+                widgets[name].marker = marker;
+            });
+
+            function scaleWidgets() {
+                const zoom = map.getZoom();
+
+                const normalized = (zoom - 15.5) / (19 - 15.5);
+
+                const clamped = Math.max(0, Math.min(1, normalized));
+
+                const minScale = 0.6;
+                const maxScale = 1.4;
+
+                const scale = minScale + (clamped * (maxScale - minScale));
+
+                document.querySelectorAll(".building-widget").forEach(el => {
+                    el.style.transform = `scale(${scale})`;
+                });
+            }
+
+map.on("zoom", scaleWidgets);
+scaleWidgets(); // initial
 
             const buildingButtons = document.querySelectorAll(".building-btn");
             buildingButtons.forEach(button => {
